@@ -33,7 +33,19 @@
     font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
     font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;
   }
-  .wrap{max-width:660px;margin:0 auto;padding:34px 20px 60px}
+  .wrap{max-width:660px;margin:0 auto;padding:34px 20px 60px;position:relative;z-index:1}
+
+  /* background: the unlabeled pool as a faint dot field, with two soft lights */
+  body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:radial-gradient(rgba(198,213,239,.16) 1px,transparent 1.6px);
+    background-size:26px 26px;
+    -webkit-mask-image:radial-gradient(120% 80% at 50% 0%,#000 30%,transparent 78%);
+    mask-image:radial-gradient(120% 80% at 50% 0%,#000 30%,transparent 78%)}
+  body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(520px 340px at 88% -4%,rgba(242,86,143,.13),transparent 70%),
+      radial-gradient(620px 420px at 6% 22%,rgba(111,180,242,.10),transparent 72%),
+      radial-gradient(700px 460px at 50% 104%,rgba(95,208,122,.07),transparent 72%)}
 
   .venue{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--muted);margin-bottom:20px}
   .venue b{color:var(--text);font-weight:600}
