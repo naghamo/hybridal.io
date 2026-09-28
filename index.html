@@ -66,7 +66,7 @@
   .cells span.sw{background:var(--gold);height:100%;position:relative}
   .cells span.sw::after{content:"";position:absolute;left:50%;top:-9px;transform:translateX(-50%);
     width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid var(--gold)}
-  .striplabels{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);margin-top:11px}
+  .striplabels{font-size:12.5px;color:var(--muted);margin-top:11px;position:relative;height:1.4em}
   .striplabels .mid{color:var(--gold)}
 
   /* the strip is only drawn behind the marker: nothing ahead of it is visible */
@@ -78,11 +78,22 @@
   .cells span.sw{animation:sw-pop 7s linear infinite;animation-delay:var(--t)}
   @keyframes sw-pop{0%{transform:scaleY(1)}2%{transform:scaleY(1.22)}
     7%{transform:scaleY(1)}100%{transform:scaleY(1)}}
-  .striplabels span{opacity:0;animation:label-in .5s ease both}
-  .striplabels span:nth-child(1){animation-delay:.7s}
-  .striplabels span:nth-child(2){animation-delay:4.3s}
-  .striplabels span:nth-child(3){animation-delay:5s}
-  @keyframes label-in{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+  /* each label sits under its own stretch and lands as the marker gets there */
+  .striplabels span{position:absolute;white-space:nowrap;opacity:0;
+    transform:translate(-50%,4px)}
+  .striplabels span:nth-child(1){left:18%;animation:lbl-retrain 7s linear 700ms infinite}
+  .striplabels .mid{left:38%;animation:lbl-switch 7s linear 4258ms infinite}
+  .striplabels span:nth-child(3){left:70%;animation:lbl-ft 7s linear 4500ms infinite}
+  /* retrain holds until the switch, t★ only flashes, fine-tune holds to the end of the pass */
+  @keyframes lbl-retrain{0%{opacity:0;transform:translate(-50%,4px)}
+    3%{opacity:1;transform:translate(-50%,0)}48%{opacity:1;transform:translate(-50%,0)}
+    54%,100%{opacity:0;transform:translate(-50%,-2px)}}
+  @keyframes lbl-switch{0%{opacity:0;transform:translate(-50%,4px)}
+    4%{opacity:1;transform:translate(-50%,0)}16%{opacity:1;transform:translate(-50%,0)}
+    22%,100%{opacity:0;transform:translate(-50%,-2px)}}
+  @keyframes lbl-ft{0%{opacity:0;transform:translate(-50%,4px)}
+    3%{opacity:1;transform:translate(-50%,0)}42%{opacity:1;transform:translate(-50%,0)}
+    48%,100%{opacity:0;transform:translate(-50%,-2px)}}
 
   /* the marker itself: linear, so the rounds land exactly under it */
   .playhead{position:absolute;top:-7px;height:48px;width:2px;left:0;
@@ -207,6 +218,7 @@
     .cells{clip-path:none}
     .cells span{transform:scaleY(1);opacity:1}
     .cells span.sw::after,.striplabels span{opacity:1}
+    .striplabels span{transform:translate(-50%,0)}
     .js .reveal{opacity:1;transform:none}
     .js .reveal .ser{opacity:1;transform:none}
     .cyc{animation:none !important;opacity:1}
