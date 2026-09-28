@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Train Smarter, Not Harder — EMNLP 2026</title>
+
 <meta name="description" content="Train Smarter, Not Harder: Switching Signal-Guided Training in Active Learning. EMNLP 2026 Main Conference poster.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -57,51 +57,57 @@
   .striplabels{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);margin-top:11px}
   .striplabels .mid{color:var(--gold)}
 
-  /* one orchestrated moment: the schedule fills round by round */
-  .cells span{transform:scaleY(.06);transform-origin:bottom;
-    animation:round-in .44s cubic-bezier(.2,.85,.3,1) both;
-    animation-delay:calc(var(--i) * 42ms + 260ms)}
-  .cells span.sw{animation:switch-in .5s cubic-bezier(.2,.85,.3,1) 638ms both,
-    sw-pulse 7s linear 2.4s infinite}
-  @keyframes sw-pulse{0%,32%{box-shadow:0 0 0 0 rgba(242,86,143,0)}
-    41%{box-shadow:0 0 0 5px rgba(242,86,143,.30)}
-    54%,100%{box-shadow:0 0 0 0 rgba(242,86,143,0)}}
-  .cells span.sw::after{opacity:0;animation:tip-in .45s ease both;animation-delay:1.02s}
+  /* the strip is only drawn behind the marker: nothing ahead of it is visible */
+  .cells{clip-path:inset(-16px 100% -2px 0);
+    animation:reveal-rounds 7s linear .6s infinite}
+  @keyframes reveal-rounds{0%{clip-path:inset(-16px 100% -2px 0)}
+    55%{clip-path:inset(-16px 60% -2px 0)}
+    100%{clip-path:inset(-16px 0 -2px 0)}}
+  .cells span.sw{animation:sw-pop 7s linear infinite;animation-delay:var(--t)}
+  @keyframes sw-pop{0%{transform:scaleY(1)}2%{transform:scaleY(1.22)}
+    7%{transform:scaleY(1)}100%{transform:scaleY(1)}}
   .striplabels span{opacity:0;animation:label-in .5s ease both}
-  .striplabels span:nth-child(1){animation-delay:.5s}
-  .striplabels span:nth-child(2){animation-delay:.92s}
-  .striplabels span:nth-child(3){animation-delay:1.24s}
-  @keyframes round-in{to{transform:scaleY(1)}}
-  @keyframes switch-in{60%{transform:scaleY(1.12)}to{transform:scaleY(1)}}
-  @keyframes tip-in{to{opacity:1;transform:translate(-50%,0)}}
+  .striplabels span:nth-child(1){animation-delay:.7s}
+  .striplabels span:nth-child(2){animation-delay:4.3s}
+  .striplabels span:nth-child(3){animation-delay:5s}
   @keyframes label-in{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
 
-  /* a round marker sweeping the schedule, over and over */
+  /* the marker itself: linear, so the rounds land exactly under it */
   .playhead{position:absolute;top:-7px;height:48px;width:2px;left:0;
-    background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.75),rgba(255,255,255,0));
-    opacity:0;animation:sweep 7s cubic-bezier(.45,0,.55,1) 2.4s infinite;pointer-events:none}
+    background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.8),rgba(255,255,255,0));
+    opacity:0;animation:sweep 7s linear .6s infinite;pointer-events:none}
   .playhead::after{content:"";position:absolute;top:-4px;left:50%;transform:translateX(-50%);
     width:6px;height:6px;border-radius:50%;background:#fff}
-  @keyframes sweep{0%{left:0;opacity:0}6%{opacity:.85}88%{opacity:.85}100%{left:100%;opacity:0}}
+  @keyframes sweep{0%{left:0;opacity:0}2%{opacity:.9}55%{left:40%}96%{opacity:.9}100%{left:100%;opacity:0}}
 
   .fig{margin:34px 0 0;padding:0}
   .charts{display:flex;gap:10px}
   .chart{flex:1 1 0;min-width:0;text-align:center}
   .chart h3{margin:0 0 2px;font-size:13px;font-weight:600;color:#C2D1EC;letter-spacing:.01em}
   .chart svg{width:100%;height:auto;display:block;overflow:visible}
+  .ser{cursor:help;outline:none}
+  .ser:focus-visible polygon{stroke-dasharray:4 3}
+  .sertip{position:fixed;z-index:20;pointer-events:none;opacity:0;
+    transform:translate(-50%,-140%);transition:opacity .14s ease;
+    background:#0F2038;color:var(--text);border:1px solid var(--line);
+    border-radius:8px;padding:5px 9px;font-size:12.5px;white-space:nowrap;
+    box-shadow:0 6px 18px rgba(0,0,0,.45)}
+  .sertip.on{opacity:1}
+  .ser polygon{transition:fill-opacity .2s ease,stroke-width .2s ease}
+  .ser:hover polygon{fill-opacity:.32;stroke-width:2.8}
   .axl{fill:var(--muted);font-size:11px;font-family:inherit}
   .js .reveal .ser{opacity:0;transform:scale(.72);transform-origin:50% 50%}
   .js .reveal.in .ser{opacity:1;transform:none;
     transition:opacity .5s ease var(--d),transform .6s cubic-bezier(.2,.9,.3,1) var(--d)}
   /* the panels follow the schedule sweep above: same 7s cycle, same 2.4s start */
   .cyc{transform-origin:50% 50%}
-  .js .reveal.in .s-re{animation:phase-early 7s linear 2.4s infinite}
-  .js .reveal.in .s-ft{animation:phase-late  7s linear 2.4s infinite}
-  .js .reveal.in .s-hy{animation:phase-mid   7s linear 2.4s infinite}
-  @keyframes phase-early{0%,30%{opacity:1}44%,100%{opacity:.28}}
-  @keyframes phase-late{0%,30%{opacity:.28}44%,100%{opacity:1}}
-  @keyframes phase-mid{0%,32%{opacity:.6}41%{opacity:1;transform:scale(1.04)}
-    56%,100%{opacity:.9;transform:none}}
+  .s-re{animation:phase-early 7s linear .6s infinite}
+  .s-ft{animation:phase-late  7s linear .6s infinite}
+  .s-hy{animation:phase-mid   7s linear .6s infinite}
+  @keyframes phase-early{0%,50%{opacity:1}58%,100%{opacity:.28}}
+  @keyframes phase-late{0%,50%{opacity:.28}58%,100%{opacity:1}}
+  @keyframes phase-mid{0%,50%{opacity:.6}55%{opacity:1;transform:scale(1.04)}
+    66%,100%{opacity:.9;transform:none}}
   .legend{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 16px;margin-top:12px;
     font-size:12.5px;color:var(--muted)}
   .legend span{display:inline-flex;align-items:center;gap:6px}
@@ -127,6 +133,7 @@
   .plink .ico{flex:none;width:38px;height:38px;border-radius:10px;background:var(--accent-dim);
     color:var(--accent);display:grid;place-items:center}
   .plink .ico svg{width:19px;height:19px;display:block}
+  .plink .ico.arxiv img{width:21px;height:21px;display:block}
   .plink .t{font-weight:600;font-size:16.5px;line-height:1.3;display:block}
   .plink .d{font-size:13.5px;color:var(--muted);line-height:1.35;margin-top:2px;display:block}
 
@@ -185,7 +192,8 @@
 
   @media (prefers-reduced-motion:reduce){
     *,*::before,*::after{animation:none !important;transition:none !important}
-    .cells span{transform:scaleY(1)}
+    .cells{clip-path:none}
+    .cells span{transform:scaleY(1);opacity:1}
     .cells span.sw::after,.striplabels span{opacity:1}
     .js .reveal{opacity:1;transform:none}
     .js .reveal .ser{opacity:1;transform:none}
@@ -222,31 +230,31 @@
 
   <div class="strip" aria-hidden="true">
     <div class="cells">
-      <span class="r" style="--i:0"></span>
-      <span class="r" style="--i:1"></span>
-      <span class="r" style="--i:2"></span>
-      <span class="r" style="--i:3"></span>
-      <span class="r" style="--i:4"></span>
-      <span class="r" style="--i:5"></span>
-      <span class="r" style="--i:6"></span>
-      <span class="r" style="--i:7"></span>
-      <span class="r" style="--i:8"></span>
-      <span class="sw" style="--i:9"></span>
-      <span class="f" style="--i:10"></span>
-      <span class="f" style="--i:11"></span>
-      <span class="f" style="--i:12"></span>
-      <span class="f" style="--i:13"></span>
-      <span class="f" style="--i:14"></span>
-      <span class="f" style="--i:15"></span>
-      <span class="f" style="--i:16"></span>
-      <span class="f" style="--i:17"></span>
-      <span class="f" style="--i:18"></span>
-      <span class="f" style="--i:19"></span>
-      <span class="f" style="--i:20"></span>
-      <span class="f" style="--i:21"></span>
-      <span class="f" style="--i:22"></span>
-      <span class="f" style="--i:23"></span>
-      <span class="f" style="--i:24"></span>
+      <span class="r" style="--t:792ms"></span>
+      <span class="r" style="--t:1178ms"></span>
+      <span class="r" style="--t:1562ms"></span>
+      <span class="r" style="--t:1948ms"></span>
+      <span class="r" style="--t:2332ms"></span>
+      <span class="r" style="--t:2718ms"></span>
+      <span class="r" style="--t:3103ms"></span>
+      <span class="r" style="--t:3488ms"></span>
+      <span class="r" style="--t:3872ms"></span>
+      <span class="sw" style="--t:4258ms"></span>
+      <span class="f" style="--t:4555ms"></span>
+      <span class="f" style="--t:4765ms"></span>
+      <span class="f" style="--t:4975ms"></span>
+      <span class="f" style="--t:5185ms"></span>
+      <span class="f" style="--t:5395ms"></span>
+      <span class="f" style="--t:5605ms"></span>
+      <span class="f" style="--t:5815ms"></span>
+      <span class="f" style="--t:6025ms"></span>
+      <span class="f" style="--t:6235ms"></span>
+      <span class="f" style="--t:6445ms"></span>
+      <span class="f" style="--t:6655ms"></span>
+      <span class="f" style="--t:6865ms"></span>
+      <span class="f" style="--t:7075ms"></span>
+      <span class="f" style="--t:7285ms"></span>
+      <span class="f" style="--t:7495ms"></span>
     </div>
     <div class="playhead" aria-hidden="true"></div>
     <div class="striplabels"><span>Retrain</span><span class="mid">switch at t★</span><span>Fine-tune</span></div>
@@ -254,8 +262,8 @@
 
   <figure class="fig reveal">
     <div class="charts">
-      <div class="chart"><h3>Speed</h3><svg viewBox="0 0 208 208" role="img" aria-label="speed"><circle cx="104" cy="104" r="16.5" fill="none" stroke="rgba(176,193,224,0.15)" stroke-width="1"/><circle cx="104" cy="104" r="33.0" fill="none" stroke="rgba(176,193,224,0.15)" stroke-width="1"/><circle cx="104" cy="104" r="49.5" fill="none" stroke="rgba(176,193,224,0.15)" stroke-width="1"/><circle cx="104" cy="104" r="66.0" fill="none" stroke="rgba(176,193,224,0.34)" stroke-width="1"/><line x1="104" y1="104" x2="104.0" y2="38.0" stroke="rgba(176,193,224,.18)" stroke-width="1"/><line x1="104" y1="104" x2="170.0" y2="104.0" stroke="rgba(176,193,224,.18)" stroke-width="1"/><line x1="104" y1="104" x2="104.0" y2="170.0" stroke="rgba(176,193,224,.18)" stroke-width="1"/><line x1="104" y1="104" x2="38.0" y2="104.0" stroke="rgba(176,193,224,.18)" stroke-width="1"/><g class="ser" style="--d:0.10s"><g class="cyc s-re"><polygon points="104.0,104.0 104.0,104.0 104.0,104.0 104.0,104.0" fill="#5FD07A" fill-opacity=".14" stroke="#5FD07A" stroke-width="2" stroke-linejoin="round"/><circle cx="104.0" cy="104.0" r="2.6" fill="#5FD07A"/><circle cx="104.0" cy="104.0" r="2.6" fill="#5FD07A"/><circle cx="104.0" cy="104.0" r="2.6" fill="#5FD07A"/><circle cx="104.0" cy="104.0" r="2.6" fill="#5FD07A"/></g></g><g class="ser" style="--d:0.22s"><g class="cyc s-ft"><polygon points="104.0,38.0 170.0,104.0 104.0,170.0 38.0,104.0" fill="#6FB4F2" fill-opacity=".14" stroke="#6FB4F2" stroke-width="2" stroke-linejoin="round"/><circle cx="104.0" cy="38.0" r="2.6" fill="#6FB4F2"/><circle cx="170.0" cy="104.0" r="2.6" fill="#6FB4F2"/><circle cx="104.0" cy="170.0" r="2.6" fill="#6FB4F2"/><circle cx="38.0" cy="104.0" r="2.6" fill="#6FB4F2"/></g></g><g class="ser" style="--d:0.34s"><g class="cyc s-hy"><polygon points="104.0,75.4 133.4,104.0 104.0,141.3 74.4,104.0" fill="#FF6E86" fill-opacity=".14" stroke="#FF6E86" stroke-width="2" stroke-linejoin="round"/><circle cx="104.0" cy="75.4" r="2.6" fill="#FF6E86"/><circle cx="133.4" cy="104.0" r="2.6" fill="#FF6E86"/><circle cx="104.0" cy="141.3" r="2.6" fill="#FF6E86"/><circle cx="74.4" cy="104.0" r="2.6" fill="#FF6E86"/></g></g><g class="ser" style="--d:0.46s"><g class="cyc s-hy"><polygon points="104.0,80.8 145.6,104.0 104.0,153.6 68.7,104.0" fill="#FFB057" fill-opacity=".14" stroke="#FFB057" stroke-width="2" stroke-linejoin="round"/><circle cx="104.0" cy="80.8" r="2.6" fill="#FFB057"/><circle cx="145.6" cy="104.0" r="2.6" fill="#FFB057"/><circle cx="104.0" cy="153.6" r="2.6" fill="#FFB057"/><circle cx="68.7" cy="104.0" r="2.6" fill="#FFB057"/></g></g><text x="104.0" y="29.0" text-anchor="middle" class="axl">Sentiment</text><text x="181.0" y="108.0" text-anchor="start" class="axl">News</text><text x="104.0" y="185.0" text-anchor="middle" class="axl">Toxicity</text><text x="27.0" y="108.0" text-anchor="end" class="axl">Q&amp;A</text></svg></div>
-      <div class="chart"><h3>Calibration</h3><svg viewBox="0 0 208 208" role="img" aria-label="calibration"><circle cx="104" cy="104" r="16.5" fill="none" stroke="rgba(176,193,224,0.15)" stroke-width="1"/><circle cx="104" cy="104" r="33.0" fill="none" stroke="rgba(176,193,224,0.15)" stroke-width="1"/><circle cx="104" cy="104" r="49.5" fill="none" stroke="rgba(176,193,224,0.15)" stroke-width="1"/><circle cx="104" cy="104" r="66.0" fill="none" stroke="rgba(176,193,224,0.34)" stroke-width="1"/><line x1="104" y1="104" x2="104.0" y2="38.0" stroke="rgba(176,193,224,.18)" stroke-width="1"/><line x1="104" y1="104" x2="170.0" y2="104.0" stroke="rgba(176,193,224,.18)" stroke-width="1"/><line x1="104" y1="104" x2="104.0" y2="170.0" stroke="rgba(176,193,224,.18)" stroke-width="1"/><line x1="104" y1="104" x2="38.0" y2="104.0" stroke="rgba(176,193,224,.18)" stroke-width="1"/><g class="ser" style="--d:0.34s"><g class="cyc s-re"><polygon points="104.0,38.0 170.0,104.0 104.0,170.0 38.0,104.0" fill="#5FD07A" fill-opacity=".14" stroke="#5FD07A" stroke-width="2" stroke-linejoin="round"/><circle cx="104.0" cy="38.0" r="2.6" fill="#5FD07A"/><circle cx="170.0" cy="104.0" r="2.6" fill="#5FD07A"/><circle cx="104.0" cy="170.0" r="2.6" fill="#5FD07A"/><circle cx="38.0" cy="104.0" r="2.6" fill="#5FD07A"/></g></g><g class="ser" style="--d:0.46s"><g class="cyc s-ft"><polygon points="104.0,104.0 104.0,104.0 104.0,113.5 104.0,104.0" fill="#6FB4F2" fill-opacity=".14" stroke="#6FB4F2" stroke-width="2" stroke-linejoin="round"/><circle cx="104.0" cy="104.0" r="2.6" fill="#6FB4F2"/><circle cx="104.0" cy="104.0" r="2.6" fill="#6FB4F2"/><circle cx="104.0" cy="113.5" r="2.6" fill="#6FB4F2"/><circle cx="104.0" cy="104.0" r="2.6" fill="#6FB4F2"/></g></g><g class="ser" style="--d:0.58s"><g class="cyc s-hy"><polygon points="104.0,95.1 124.3,104.0 104.0,120.6 81.8,104.0" fill="#FF6E86" fill-opacity=".14" stroke="#FF6E86" stroke-width="2" stroke-linejoin="round"/><circle cx="104.0" cy="95.1" r="2.6" fill="#FF6E86"/><circle cx="124.3" cy="104.0" r="2.6" fill="#FF6E86"/><circle cx="104.0" cy="120.6" r="2.6" fill="#FF6E86"/><circle cx="81.8" cy="104.0" r="2.6" fill="#FF6E86"/></g></g><g class="ser" style="--d:0.70s"><g class="cyc s-hy"><polygon points="104.0,68.6 111.5,104.0 104.0,104.0 88.3,104.0" fill="#FFB057" fill-opacity=".14" stroke="#FFB057" stroke-width="2" stroke-linejoin="round"/><circle cx="104.0" cy="68.6" r="2.6" fill="#FFB057"/><circle cx="111.5" cy="104.0" r="2.6" fill="#FFB057"/><circle cx="104.0" cy="104.0" r="2.6" fill="#FFB057"/><circle cx="88.3" cy="104.0" r="2.6" fill="#FFB057"/></g></g><text x="104.0" y="29.0" text-anchor="middle" class="axl">Sentiment</text><text x="181.0" y="108.0" text-anchor="start" class="axl">News</text><text x="104.0" y="185.0" text-anchor="middle" class="axl">Toxicity</text><text x="27.0" y="108.0" text-anchor="end" class="axl">Q&amp;A</text></svg></div>
+      <div class="chart"><h3>Calibration</h3><svg viewBox="0 0 208 208" role="img" aria-label="calibration"><circle cx="104" cy="104" r="16.5" fill="none" stroke="rgba(176,193,224,0.15)" stroke-width="1"/><circle cx="104" cy="104" r="33.0" fill="none" stroke="rgba(176,193,224,0.15)" stroke-width="1"/><circle cx="104" cy="104" r="49.5" fill="none" stroke="rgba(176,193,224,0.15)" stroke-width="1"/><circle cx="104" cy="104" r="66.0" fill="none" stroke="rgba(176,193,224,0.34)" stroke-width="1"/><line x1="104" y1="104" x2="104.0" y2="38.0" stroke="rgba(176,193,224,.18)" stroke-width="1"/><line x1="104" y1="104" x2="170.0" y2="104.0" stroke="rgba(176,193,224,.18)" stroke-width="1"/><line x1="104" y1="104" x2="104.0" y2="170.0" stroke="rgba(176,193,224,.18)" stroke-width="1"/><line x1="104" y1="104" x2="38.0" y2="104.0" stroke="rgba(176,193,224,.18)" stroke-width="1"/><g class="ser" style="--d:0.10s" data-name="Retrain — Calibration" tabindex="0" role="img" aria-label="Retrain — Calibration"><g class="cyc s-re"><polygon points="104.0,38.0 170.0,104.0 104.0,170.0 38.0,104.0" fill="#5FD07A" fill-opacity=".14" stroke="#5FD07A" stroke-width="2" stroke-linejoin="round"/><circle cx="104.0" cy="38.0" r="2.6" fill="#5FD07A"/><circle cx="170.0" cy="104.0" r="2.6" fill="#5FD07A"/><circle cx="104.0" cy="170.0" r="2.6" fill="#5FD07A"/><circle cx="38.0" cy="104.0" r="2.6" fill="#5FD07A"/></g></g><g class="ser" style="--d:0.22s" data-name="FineTune — Calibration" tabindex="0" role="img" aria-label="FineTune — Calibration"><g class="cyc s-ft"><polygon points="104.0,104.0 104.0,104.0 104.0,113.5 104.0,104.0" fill="#6FB4F2" fill-opacity=".14" stroke="#6FB4F2" stroke-width="2" stroke-linejoin="round"/><circle cx="104.0" cy="104.0" r="2.6" fill="#6FB4F2"/><circle cx="104.0" cy="104.0" r="2.6" fill="#6FB4F2"/><circle cx="104.0" cy="113.5" r="2.6" fill="#6FB4F2"/><circle cx="104.0" cy="104.0" r="2.6" fill="#6FB4F2"/></g></g><g class="ser" style="--d:0.34s" data-name="HybridAL (Δα) — Calibration" tabindex="0" role="img" aria-label="HybridAL (Δα) — Calibration"><g class="cyc s-hy"><polygon points="104.0,95.1 124.3,104.0 104.0,120.6 81.8,104.0" fill="#FF6E86" fill-opacity=".14" stroke="#FF6E86" stroke-width="2" stroke-linejoin="round"/><circle cx="104.0" cy="95.1" r="2.6" fill="#FF6E86"/><circle cx="124.3" cy="104.0" r="2.6" fill="#FF6E86"/><circle cx="104.0" cy="120.6" r="2.6" fill="#FF6E86"/><circle cx="81.8" cy="104.0" r="2.6" fill="#FF6E86"/></g></g><g class="ser" style="--d:0.46s" data-name="HybridAL (ΔAcc) — Calibration" tabindex="0" role="img" aria-label="HybridAL (ΔAcc) — Calibration"><g class="cyc s-hy"><polygon points="104.0,68.6 111.5,104.0 104.0,104.0 88.3,104.0" fill="#FFB057" fill-opacity=".14" stroke="#FFB057" stroke-width="2" stroke-linejoin="round"/><circle cx="104.0" cy="68.6" r="2.6" fill="#FFB057"/><circle cx="111.5" cy="104.0" r="2.6" fill="#FFB057"/><circle cx="104.0" cy="104.0" r="2.6" fill="#FFB057"/><circle cx="88.3" cy="104.0" r="2.6" fill="#FFB057"/></g></g><text x="104.0" y="29.0" text-anchor="middle" class="axl">Sentiment</text><text x="181.0" y="108.0" text-anchor="start" class="axl">News</text><text x="104.0" y="185.0" text-anchor="middle" class="axl">Toxicity</text><text x="27.0" y="108.0" text-anchor="end" class="axl">Q&amp;A</text></svg></div>
+      <div class="chart"><h3>Speed</h3><svg viewBox="0 0 208 208" role="img" aria-label="speed"><circle cx="104" cy="104" r="16.5" fill="none" stroke="rgba(176,193,224,0.15)" stroke-width="1"/><circle cx="104" cy="104" r="33.0" fill="none" stroke="rgba(176,193,224,0.15)" stroke-width="1"/><circle cx="104" cy="104" r="49.5" fill="none" stroke="rgba(176,193,224,0.15)" stroke-width="1"/><circle cx="104" cy="104" r="66.0" fill="none" stroke="rgba(176,193,224,0.34)" stroke-width="1"/><line x1="104" y1="104" x2="104.0" y2="38.0" stroke="rgba(176,193,224,.18)" stroke-width="1"/><line x1="104" y1="104" x2="170.0" y2="104.0" stroke="rgba(176,193,224,.18)" stroke-width="1"/><line x1="104" y1="104" x2="104.0" y2="170.0" stroke="rgba(176,193,224,.18)" stroke-width="1"/><line x1="104" y1="104" x2="38.0" y2="104.0" stroke="rgba(176,193,224,.18)" stroke-width="1"/><g class="ser" style="--d:0.34s" data-name="Retrain — Speed" tabindex="0" role="img" aria-label="Retrain — Speed"><g class="cyc s-re"><polygon points="104.0,104.0 104.0,104.0 104.0,104.0 104.0,104.0" fill="#5FD07A" fill-opacity=".14" stroke="#5FD07A" stroke-width="2" stroke-linejoin="round"/><circle cx="104.0" cy="104.0" r="2.6" fill="#5FD07A"/><circle cx="104.0" cy="104.0" r="2.6" fill="#5FD07A"/><circle cx="104.0" cy="104.0" r="2.6" fill="#5FD07A"/><circle cx="104.0" cy="104.0" r="2.6" fill="#5FD07A"/></g></g><g class="ser" style="--d:0.46s" data-name="FineTune — Speed" tabindex="0" role="img" aria-label="FineTune — Speed"><g class="cyc s-ft"><polygon points="104.0,38.0 170.0,104.0 104.0,170.0 38.0,104.0" fill="#6FB4F2" fill-opacity=".14" stroke="#6FB4F2" stroke-width="2" stroke-linejoin="round"/><circle cx="104.0" cy="38.0" r="2.6" fill="#6FB4F2"/><circle cx="170.0" cy="104.0" r="2.6" fill="#6FB4F2"/><circle cx="104.0" cy="170.0" r="2.6" fill="#6FB4F2"/><circle cx="38.0" cy="104.0" r="2.6" fill="#6FB4F2"/></g></g><g class="ser" style="--d:0.58s" data-name="HybridAL (Δα) — Speed" tabindex="0" role="img" aria-label="HybridAL (Δα) — Speed"><g class="cyc s-hy"><polygon points="104.0,75.4 133.4,104.0 104.0,141.3 74.4,104.0" fill="#FF6E86" fill-opacity=".14" stroke="#FF6E86" stroke-width="2" stroke-linejoin="round"/><circle cx="104.0" cy="75.4" r="2.6" fill="#FF6E86"/><circle cx="133.4" cy="104.0" r="2.6" fill="#FF6E86"/><circle cx="104.0" cy="141.3" r="2.6" fill="#FF6E86"/><circle cx="74.4" cy="104.0" r="2.6" fill="#FF6E86"/></g></g><g class="ser" style="--d:0.70s" data-name="HybridAL (ΔAcc) — Speed" tabindex="0" role="img" aria-label="HybridAL (ΔAcc) — Speed"><g class="cyc s-hy"><polygon points="104.0,80.8 145.6,104.0 104.0,153.6 68.7,104.0" fill="#FFB057" fill-opacity=".14" stroke="#FFB057" stroke-width="2" stroke-linejoin="round"/><circle cx="104.0" cy="80.8" r="2.6" fill="#FFB057"/><circle cx="145.6" cy="104.0" r="2.6" fill="#FFB057"/><circle cx="104.0" cy="153.6" r="2.6" fill="#FFB057"/><circle cx="68.7" cy="104.0" r="2.6" fill="#FFB057"/></g></g><text x="104.0" y="29.0" text-anchor="middle" class="axl">Sentiment</text><text x="181.0" y="108.0" text-anchor="start" class="axl">News</text><text x="104.0" y="185.0" text-anchor="middle" class="axl">Toxicity</text><text x="27.0" y="108.0" text-anchor="end" class="axl">Q&amp;A</text></svg></div>
     </div>
     <div class="legend"><span><i style="background:#5FD07A"></i>Retrain</span><span><i style="background:#6FB4F2"></i>FineTune</span><span><i style="background:#FF6E86"></i>HybridAL (Δα)</span><span><i style="background:#FFB057"></i>HybridAL (ΔAcc)</span></div>
     <figcaption>No single training strategy dominates. Bigger is better on both panels, min-max normalized per task family. As the schedule above sweeps its rounds, the panels follow it: Retrain leads while the schedule retrains, FineTune takes over after t★, and the HybridAL variants hold the middle throughout.</figcaption>
@@ -263,7 +271,7 @@
 
   <div class="primary">
     <a class="plink" href="https://arxiv.org/abs/2609.06806">
-      <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6.2 3.4 17.4 20.6"/><path d="M19.2 4.2 6.6 19.8"/></svg></span>
+      <span class="ico arxiv" aria-hidden="true"><img src="data:image/png;base64,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" alt=""></span>
       <span><span class="t">Read the paper</span></span>
     </a>
     <a class="plink" href="https://github.com/naghamo/hybridAL">
@@ -271,7 +279,7 @@
       <span><span class="t">Get the code</span></span>
     </a>
     <a class="plink" href="POSTER_PDF_URL_HERE">
-      <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3.2"/></svg></span>
+      <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2.8" width="16" height="18.4" rx="1.8"/><path d="M7.4 6.8h9.2"/><path d="M7.4 17.4V12M10.9 17.4V9.4M14.4 17.4v-4.2M17.9 17.4v-2.6"/></svg></span>
       <span><span class="t">See the poster</span></span>
     </a>
   </div>
@@ -360,6 +368,24 @@
 
 
   // pointer-reactive tilt, spotlight and photo drift (fine pointers only)
+  // name each series on hover
+  var tip = document.createElement('div');
+  tip.className = 'sertip'; document.body.appendChild(tip);
+  function place(ev, el){
+    var r = el.getBoundingClientRect();
+    tip.style.left = (ev ? ev.clientX : r.left + r.width/2) + 'px';
+    tip.style.top  = (ev ? ev.clientY : r.top) + 'px';
+  }
+  document.querySelectorAll('.ser').forEach(function(g){
+    function show(ev){ tip.textContent = g.getAttribute('data-name'); place(ev, g); tip.classList.add('on'); }
+    function hide(){ tip.classList.remove('on'); }
+    g.addEventListener('pointerenter', show);
+    g.addEventListener('pointermove', function(ev){ place(ev, g); });
+    g.addEventListener('pointerleave', hide);
+    g.addEventListener('focus', function(){ show(null); });
+    g.addEventListener('blur', hide);
+  });
+
   var fine = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
   var still = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
   if(!fine || still) return;
