@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Train Smarter, Not Harder — EMNLP 2026</title>
+<meta name="description" content="Train Smarter, Not Harder: Switching Signal-Guided Training in Active Learning. EMNLP 2026 Main Conference poster.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep:#1B3051;
+    --card:#24406B;
+    --card-hi:#2C4C7E;
+    --line:rgba(176,193,224,.20);
+    --text:#EDF2FA;
+    --muted:#A6B9DA;
+    --accent:#F2568F;
+    --accent-dim:rgba(242,86,143,.14);
+    --gold:#F2568F;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *,*::before,*::after{box-sizing:inherit}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background:var(--bg-deep);
+    color:var(--text);
+    font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:660px;margin:0 auto;padding:34px 20px 60px}
+
+  .venue{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--muted);margin-bottom:20px}
+  .venue b{color:var(--text);font-weight:600}
+  .venue .dot{width:5px;height:5px;border-radius:50%;background:var(--accent);flex:none}
+
+  h1{font-size:clamp(27px,6.4vw,38px);line-height:1.14;letter-spacing:-.022em;font-weight:600;margin:0;text-wrap:balance}
+  h1 .sub{display:block;font-weight:400;color:#C5D4EE;font-size:.68em;line-height:1.25;margin-top:9px;letter-spacing:-.01em}
+  .byline{color:var(--muted);font-size:14px;margin:14px 0 0}
+
+  .tldr{color:#C9D7F0;font-size:15.5px;margin:20px 0 0;max-width:62ch}
+  .tldr b{color:var(--text);font-weight:600}
+
+  .strip{margin:30px 0 4px}
+  .cells{display:flex;gap:3px;align-items:flex-end;height:34px}
+  .cells span{flex:1 1 0;border-radius:2px}
+  .cells span.r{background:#8FA8D8;height:100%}
+  .cells span.f{background:#3A5A96;height:62%}
+  .cells span.sw{background:var(--gold);height:100%;position:relative}
+  .cells span.sw::after{content:"";position:absolute;left:50%;top:-9px;transform:translateX(-50%);
+    width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid var(--gold)}
+  .striplabels{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);margin-top:11px}
+  .striplabels .mid{color:var(--gold)}
+
+  /* one orchestrated moment: the schedule fills round by round */
+  .cells span{transform:scaleY(.06);transform-origin:bottom;
+    animation:round-in .44s cubic-bezier(.2,.85,.3,1) both;
+    animation-delay:calc(var(--i) * 42ms + 260ms)}
+  .cells span.sw{animation-name:switch-in;animation-duration:.5s}
+  .cells span.sw::after{opacity:0;animation:tip-in .45s ease both;animation-delay:calc(var(--i) * 42ms + 640ms)}
+  .striplabels span{opacity:0;animation:label-in .5s ease both}
+  .striplabels span:nth-child(1){animation-delay:.5s}
+  .striplabels span:nth-child(2){animation-delay:.92s}
+  .striplabels span:nth-child(3){animation-delay:1.24s}
+  @keyframes round-in{to{transform:scaleY(1)}}
+  @keyframes switch-in{60%{transform:scaleY(1.12)}to{transform:scaleY(1)}}
+  @keyframes tip-in{to{opacity:1;transform:translate(-50%,0)}}
+  @keyframes label-in{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+
+  .primary{display:grid;gap:11px;margin:34px 0 46px}
+  .plink{display:flex;align-items:center;gap:15px;padding:17px 18px;border-radius:14px;
+    background:var(--card);border:1px solid var(--line);color:var(--text);text-decoration:none;
+    transition:background .18s ease,border-color .18s ease,transform .18s ease}
+  .plink:active{transform:translateY(1px)}
+  .plink .ico{transition:transform .22s cubic-bezier(.2,.8,.3,1)}
+  .plink:hover .ico,.plink:focus-visible .ico{transform:scale(1.08)}
+  .plink:hover,.plink:focus-visible{background:var(--card-hi);border-color:rgba(242,86,143,.55);transform:translateY(-2px)}
+  .plink .ico{flex:none;width:38px;height:38px;border-radius:10px;background:var(--accent-dim);
+    color:var(--accent);display:grid;place-items:center}
+  .plink .ico svg{width:19px;height:19px;display:block}
+  .plink .t{font-weight:600;font-size:16.5px;line-height:1.3;display:block}
+
+  h2{font-size:14px;font-weight:600;color:var(--muted);margin:0 0 4px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+
+  .person{display:flex;gap:16px;align-items:flex-start;padding:20px 0;border-bottom:1px solid var(--line)}
+  .person:last-of-type{border-bottom:0}
+  .meta{flex:1 1 auto;min-width:0}
+  .name{font-size:18.5px;font-weight:600;letter-spacing:-.012em;line-height:1.25}
+  .presenting{display:inline-block;vertical-align:2px;margin-left:8px;font-size:11px;font-weight:600;
+    color:var(--accent);background:var(--accent-dim);border-radius:20px;padding:2px 9px}
+  .role{color:#C2D1EC;font-size:14px;margin-top:4px;line-height:1.4}
+  .bio{color:var(--muted);font-size:14px;margin-top:9px;line-height:1.5;max-width:56ch}
+  .links{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+  .links a{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;color:#D3DFF5;text-decoration:none;
+    background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:8px;padding:6px 11px;
+    transition:background .16s ease,border-color .16s ease,color .16s ease,transform .16s ease}
+  .links a:hover,.links a:focus-visible{transform:translateY(-1px)}
+  .links a:hover,.links a:focus-visible{color:#fff;background:rgba(242,86,143,.16);border-color:rgba(242,86,143,.55)}
+  .links svg{width:14px;height:14px;flex:none;opacity:.85}
+
+  .avatar{flex:none;width:86px;height:86px;border-radius:50%;overflow:hidden;position:relative;
+    background:var(--card-hi);border:3px solid var(--accent);order:2}
+  .avatar img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s cubic-bezier(.2,.8,.3,1)}
+  .person:hover .avatar img{transform:scale(1.05)}
+  .avatar .initials{position:absolute;inset:0;display:grid;place-items:center;font-size:25px;font-weight:600;color:#9FB4DC}
+
+  footer{margin-top:44px;padding-top:22px;border-top:1px solid var(--line);color:var(--muted);font-size:13.5px}
+  footer p{margin:0 0 9px}
+
+  a:focus-visible,.plink:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none !important;transition:none !important}
+    .cells span{transform:scaleY(1)}
+    .cells span.sw::after,.striplabels span{opacity:1}
+  }
+
+  @media (max-width:420px){
+    .avatar{width:68px;height:68px;border-width:2.5px}
+    .avatar .initials{font-size:21px}
+    .person{gap:13px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="venue"><span class="dot"></span> <b>EMNLP 2026</b> Main Conference · Budapest · Poster</div>
+
+  <h1>Train Smarter, Not Harder
+    <span class="sub">Switching Signal-Guided Training in Active Learning</span>
+  </h1>
+  <p class="byline">Nagham Omar · Maya Rozenshtein · Evgeny Mishlyakov · Avigdor Gal</p>
+
+  <p class="tldr">Whether to retrain from scratch or fine-tune from the last checkpoint is an overlooked decision in active learning. <b>HybridAL</b> watches an online stabilization signal and switches once, keeping macro-F1 within a 0.010 margin of both strategies while cutting training time by up to 49%.</p>
+
+  <div class="strip" aria-hidden="true">
+    <div class="cells">
+      <span class="r" style="--i:0"></span>
+      <span class="r" style="--i:1"></span>
+      <span class="r" style="--i:2"></span>
+      <span class="r" style="--i:3"></span>
+      <span class="r" style="--i:4"></span>
+      <span class="r" style="--i:5"></span>
+      <span class="r" style="--i:6"></span>
+      <span class="r" style="--i:7"></span>
+      <span class="r" style="--i:8"></span>
+      <span class="sw" style="--i:9"></span>
+      <span class="f" style="--i:10"></span>
+      <span class="f" style="--i:11"></span>
+      <span class="f" style="--i:12"></span>
+      <span class="f" style="--i:13"></span>
+      <span class="f" style="--i:14"></span>
+      <span class="f" style="--i:15"></span>
+      <span class="f" style="--i:16"></span>
+      <span class="f" style="--i:17"></span>
+      <span class="f" style="--i:18"></span>
+      <span class="f" style="--i:19"></span>
+      <span class="f" style="--i:20"></span>
+      <span class="f" style="--i:21"></span>
+      <span class="f" style="--i:22"></span>
+      <span class="f" style="--i:23"></span>
+      <span class="f" style="--i:24"></span>
+    </div>
+    <div class="striplabels"><span>Retrain</span><span class="mid">switch at t★</span><span>Fine-tune</span></div>
+  </div>
+
+  <div class="primary">
+    <a class="plink" href="ARXIV_URL_HERE">
+      <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h5"/></svg></span>
+      <span><span class="t">Read the paper</span></span>
+    </a>
+    <a class="plink" href="https://github.com/naghamo/hybridAL">
+      <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49l-.01-1.9c-2.78.62-3.37-1.21-3.37-1.21-.46-1.19-1.11-1.51-1.11-1.51-.91-.63.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.89 1.57 2.34 1.12 2.91.86.09-.66.35-1.12.63-1.38-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05a9.3 9.3 0 0 1 5 0c1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9l-.01 2.818c0 .27.18.59.69.49A10.26 10.26 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"/></svg></span>
+      <span><span class="t">Get the code</span></span>
+    </a>
+    <a class="plink" href="POSTER_PDF_URL_HERE">
+      <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3" width="17" height="18" rx="2"/><path d="M7.5 16.5V12M11.2 16.5V8.5M15 16.5v-6M18 16.5v-3"/><path d="M7 7h6"/></svg></span>
+      <span><span class="t">See the poster</span></span>
+    </a>
+  </div>
+
+  <h2>Authors</h2>
+
+  <div class="person">
+    <div class="meta">
+      <div class="name">Nagham Omar<span class="presenting">presenting</span></div>
+      <div class="role">MSc student, Data Science &amp; Engineering<br>Faculty of Data &amp; Decision Sciences, Technion</div>
+      <p class="bio">Nagham Omar is a master's student in the Faculty of Data and Decision Sciences at the Technion – Israel Institute of Technology, advised by Prof. Avigdor Gal. Her research spans ordinal alignment problems in machine learning, LLMs as judges, and active learning.</p>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/nagham-omar-88ab9a226/"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.76V21h-4v-5.6c0-1.34-.03-3.06-1.9-3.06-1.9 0-2.2 1.46-2.2 2.96V21H9z"/></svg> LinkedIn</a>
+        <a href="mailto:nagham.omar@campus.technion.ac.il"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg> Technion email</a>
+        <a href="mailto:nagham.technion@gmail.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg> Gmail</a>
+        <a href="https://github.com/naghamo"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49l-.01-1.9c-2.78.62-3.37-1.21-3.37-1.21-.46-1.19-1.11-1.51-1.11-1.51-.91-.63.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.89 1.57 2.34 1.12 2.91.86.09-.66.35-1.12.63-1.38-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05a9.3 9.3 0 0 1 5 0c1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9l-.01 2.818c0 .27.18.59.69.49A10.26 10.26 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"/></svg> GitHub</a>
+        <a href="https://huggingface.co/naghamo"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="9.6" r="6.7"/><g fill="#1B3051"><path d="M9.0 8.1c.75 0 1.35.62 1.35 1.38H7.65c0-.76.6-1.38 1.35-1.38z"/><path d="M15.0 8.1c.75 0 1.35.62 1.35 1.38h-2.7c0-.76.6-1.38 1.35-1.38z"/><path d="M12 13.9c-1.6 0-2.95-.92-3.4-2.2-.1-.3.12-.6.44-.6h5.92c.32 0 .54.3.44.6-.45 1.28-1.8 2.2-3.4 2.2z"/></g><g transform="rotate(-24 5.9 16.6)"><rect x="3.3" y="12.9" width="5.2" height="7.4" rx="2.5"/><path d="M4.9 13.7v5.8M6.6 13.7v5.8" stroke="#1B3051" stroke-width=".72" stroke-linecap="round"/></g><g transform="rotate(24 18.1 16.6)"><rect x="15.5" y="12.9" width="5.2" height="7.4" rx="2.5"/><path d="M17.1 13.7v5.8M18.8 13.7v5.8" stroke="#1B3051" stroke-width=".72" stroke-linecap="round"/></g></svg> Hugging Face</a>
+        <a href="https://scholar.google.com/citations?user=n1mU6h0AAAAJ&amp;hl=en"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 1 9l11 6 9-4.91V17h2V9z"/><path d="M5 13.18v4L12 21l7-3.82v-4L12 17z"/></svg> Scholar</a>
+        <a href="https://x.com/Nagham_Omar_"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-7.1 8.1L23 22h-6.6l-5.2-6.8L5.3 22H2.2l7.6-8.7L1.6 2h6.8l4.7 6.2zm-1.1 18h1.7L7.3 3.8H5.4z"/></svg> X</a>
+      </div>
+    </div>
+    <div class="avatar"><img src="photos/nagham.jpg" alt="Nagham Omar"></div>
+  </div>
+
+  <div class="person">
+    <div class="meta">
+      <div class="name">Maya Rozenshtein<span class="presenting">presenting</span></div>
+      <div class="role">BSc student, Data Science &amp; Engineering<br>Faculty of Data &amp; Decision Sciences, Technion</div>
+      <p class="bio">Maya Rozenshtein is finishing a BSc in Data Science &amp; Engineering at the Technion – Israel Institute of Technology. She is most curious about NLP and the intersection between data science and other fields, such as cognition, linguistics, psychology and law.</p>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/maya-rozenshtein-93b148241/"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.76V21h-4v-5.6c0-1.34-.03-3.06-1.9-3.06-1.9 0-2.2 1.46-2.2 2.96V21H9z"/></svg> LinkedIn</a>
+        <a href="mailto:marozy2014@gmail.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg> Email</a>
+      </div>
+    </div>
+    <div class="avatar"><img src="photos/maya.jpg" alt="Maya Rozenshtein"></div>
+  </div>
+
+  <div class="person">
+    <div class="meta">
+      <div class="name">Evgeny Mishlyakov</div>
+      <div class="role">Research assistant<br>Faculty of Data &amp; Decision Sciences, Technion</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/evgeny-mishlyakov-050536281/"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.76V21h-4v-5.6c0-1.34-.03-3.06-1.9-3.06-1.9 0-2.2 1.46-2.2 2.96V21H9z"/></svg> LinkedIn</a>
+        <a href="mailto:ym@campus.technion.ac.il"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg> Email</a>
+      </div>
+    </div>
+    <div class="avatar"><span class="initials">EM</span></div>
+  </div>
+
+  <div class="person">
+    <div class="meta">
+      <div class="name">Avigdor Gal</div>
+      <div class="role">Benjamin and Florence Free Chaired Professor of Data Science<br>Faculty of Data &amp; Decision Sciences, Technion</div>
+      <p class="bio">Prof. Gal's research focuses on effective methods of integrating data from multiple and diverse sources under conditions of uncertainty. With close to 200 publications in leading journals and conferences in the areas of databases and AI, he is a recipient of multiple best paper and test of time awards.</p>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/avi-avigdor-gal-432a49/"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.76V21h-4v-5.6c0-1.34-.03-3.06-1.9-3.06-1.9 0-2.2 1.46-2.2 2.96V21H9z"/></svg> LinkedIn</a>
+        <a href="mailto:avigal@technion.ac.il"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg> Email</a>
+        <a href="https://avigal.dds.technion.ac.il/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18a15 15 0 0 1 0-18"/></svg> Website</a>
+        <a href="https://scholar.google.com/citations?user=APs1p2oAAAAJ&amp;hl=en"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 1 9l11 6 9-4.91V17h2V9z"/><path d="M5 13.18v4L12 21l7-3.82v-4L12 17z"/></svg> Scholar</a>
+      </div>
+    </div>
+    <div class="avatar"><img src="photos/avigdor.jpg" alt="Avigdor Gal"></div>
+  </div>
+
+  <footer>
+    <p>Faculty of Data &amp; Decision Sciences, Technion – Israel Institute of Technology, Haifa.</p>
+  
+  </footer>
+
+</div>
+</body>
+</html>
