@@ -3,8 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Train Smarter, Not Harder: Switching Signal-Guided Training in Active Learning</title>
 
 <meta name="description" content="Train Smarter, Not Harder: Switching Signal-Guided Training in Active Learning. EMNLP 2026 Main Conference poster.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%231B3051%22/%3E%3Crect%20x%3D%225%22%20%20y%3D%227%22%20%20width%3D%224%22%20height%3D%2218%22%20rx%3D%221.4%22%20fill%3D%22%238FA8D8%22/%3E%3Crect%20x%3D%2210.5%22%20y%3D%227%22%20%20width%3D%224%22%20height%3D%2218%22%20rx%3D%221.4%22%20fill%3D%22%238FA8D8%22/%3E%3Crect%20x%3D%2216%22%20y%3D%227%22%20%20width%3D%224%22%20height%3D%2218%22%20rx%3D%221.4%22%20fill%3D%22%23F2568F%22/%3E%3Crect%20x%3D%2221.5%22%20y%3D%2214%22%20width%3D%224%22%20height%3D%2211%22%20rx%3D%221.4%22%20fill%3D%22%233A5A96%22/%3E%3Crect%20x%3D%2227%22%20y%3D%2214%22%20width%3D%223%22%20height%3D%2211%22%20rx%3D%221.2%22%20fill%3D%22%233A5A96%22/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/png;base64,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">
+<meta name="theme-color" content="#1B3051">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
@@ -66,15 +70,20 @@
   .cells span.sw{background:var(--gold);height:100%;position:relative}
   .cells span.sw::after{content:"";position:absolute;left:50%;top:-9px;transform:translateX(-50%);
     width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid var(--gold)}
-  .striplabels{font-size:12.5px;color:var(--muted);margin-top:11px;position:relative;height:1.4em}
+  .striplabels{font-size:12.5px;color:var(--muted);margin-top:6px;position:relative;height:1.4em}
   .striplabels .mid{color:var(--gold)}
 
   /* the strip is only drawn behind the marker: nothing ahead of it is visible */
-  .cells{clip-path:inset(-16px 100% -2px 0);
+  .track{clip-path:inset(-16px 100% -2px 0);
     animation:reveal-rounds 7s linear .6s infinite}
   @keyframes reveal-rounds{0%{clip-path:inset(-16px 100% -2px 0)}
     55%{clip-path:inset(-16px 60% -2px 0)}
     100%{clip-path:inset(-16px 0 -2px 0)}}
+  .nll{display:block;width:100%;height:30px;margin-top:5px}
+  .nll .trace{fill:none;stroke:rgba(255,255,255,.20);stroke-width:1;
+    vector-effect:non-scaling-stroke;stroke-linejoin:round;stroke-linecap:round}
+  .nll .ref{stroke:rgba(255,255,255,.09);stroke-width:1;stroke-dasharray:3 5;
+    vector-effect:non-scaling-stroke}
   .cells span.sw{animation:sw-pop 7s linear infinite;animation-delay:var(--t)}
   @keyframes sw-pop{0%{transform:scaleY(1)}2%{transform:scaleY(1.22)}
     7%{transform:scaleY(1)}100%{transform:scaleY(1)}}
@@ -215,7 +224,7 @@
 
   @media (prefers-reduced-motion:reduce){
     *,*::before,*::after{animation:none !important;transition:none !important}
-    .cells{clip-path:none}
+    .track{clip-path:none}
     .cells span{transform:scaleY(1);opacity:1}
     .cells span.sw::after,.striplabels span{opacity:1}
     .striplabels span{transform:translate(-50%,0)}
@@ -253,6 +262,7 @@
   <p class="tldr">Whether to retrain from scratch or fine-tune from the last checkpoint is an overlooked decision in active learning. <b>HybridAL</b> watches an online stabilization signal and switches once, keeping macro-F1 within a 0.010 margin of both strategies while cutting training time by up to 49%.</p>
 
   <div class="strip" aria-hidden="true">
+    <div class="track">
     <div class="cells">
       <span class="r" style="--t:792ms"></span>
       <span class="r" style="--t:1178ms"></span>
@@ -279,6 +289,11 @@
       <span class="f" style="--t:7075ms"></span>
       <span class="f" style="--t:7285ms"></span>
       <span class="f" style="--t:7495ms"></span>
+    </div>
+      <svg class="nll" viewBox="0 0 250 34" preserveAspectRatio="none" aria-hidden="true">
+        <line class="ref" x1="0" y1="28" x2="250" y2="28"/>
+        <path class="trace" d="M0 8 L96 8 L104 19 L250 19"/>
+      </svg>
     </div>
     <div class="playhead" aria-hidden="true"></div>
     <div class="striplabels"><span>Retrain</span><span class="mid">switch at t★</span><span>Fine-tune</span></div>
