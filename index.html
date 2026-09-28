@@ -56,6 +56,9 @@
   .venue .dot{width:5px;height:5px;border-radius:50%;background:var(--accent);flex:none}
 
   h1{font-size:clamp(27px,6.4vw,38px);line-height:1.14;letter-spacing:-.022em;font-weight:600;margin:0;text-wrap:balance}
+  h1 .w-good,h1 .w-bad{transition:color .28s ease}
+  h1:hover .w-good,h1:focus-within .w-good{color:#5FD07A}
+  h1:hover .w-bad,h1:focus-within .w-bad{color:#FF6E6E}
   h1 .sub{display:block;font-weight:400;color:#C5D4EE;font-size:.68em;line-height:1.25;margin-top:9px;letter-spacing:-.01em}
   .byline{color:var(--muted);font-size:14px;margin:14px 0 0}
 
@@ -65,8 +68,8 @@
   .strip{margin:30px 0 4px;position:relative}
   .cells{display:flex;gap:3px;align-items:flex-end;height:34px;position:relative}
   .cells span{flex:1 1 0;border-radius:2px}
-  .cells span.r{background:#8FA8D8;height:100%}
-  .cells span.f{background:#3A5A96;height:62%}
+  .cells span.r{background:#5FD07A;height:100%}
+  .cells span.f{background:#6FB4F2;height:62%}
   .cells span.sw{background:var(--gold);height:100%;position:relative}
   .cells span.sw::after{content:"";position:absolute;left:50%;top:-9px;transform:translateX(-50%);
     width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid var(--gold)}
@@ -74,12 +77,12 @@
   .striplabels .mid{color:var(--gold)}
 
   /* the strip is only drawn behind the marker: nothing ahead of it is visible */
-  .track{clip-path:inset(-16px 100% -2px 0);
+  .track{clip-path:inset(-4px 100% -2px 0);
     animation:reveal-rounds 7s linear .6s infinite}
-  @keyframes reveal-rounds{0%{clip-path:inset(-16px 100% -2px 0)}
-    55%{clip-path:inset(-16px 60% -2px 0)}
-    100%{clip-path:inset(-16px 0 -2px 0)}}
-  .nll{display:block;width:100%;height:30px;margin-top:5px}
+  @keyframes reveal-rounds{0%{clip-path:inset(-4px 100% -2px 0)}
+    55%{clip-path:inset(-4px 60% -2px 0)}
+    100%{clip-path:inset(-4px 0 -2px 0)}}
+  .nll{display:block;width:100%;height:30px;margin-bottom:6px}
   .nll .trace{fill:none;stroke:rgba(255,255,255,.20);stroke-width:1;
     vector-effect:non-scaling-stroke;stroke-linejoin:round;stroke-linecap:round}
   .nll .ref{stroke:rgba(255,255,255,.09);stroke-width:1;stroke-dasharray:3 5;
@@ -90,9 +93,9 @@
   /* each label sits under its own stretch and lands as the marker gets there */
   .striplabels span{position:absolute;white-space:nowrap;opacity:0;
     transform:translate(-50%,4px)}
-  .striplabels span:nth-child(1){left:18%;animation:lbl-retrain 7s linear 700ms infinite}
+  .striplabels span:nth-child(1){color:#5FD07A;left:18%;animation:lbl-retrain 7s linear 700ms infinite}
   .striplabels .mid{left:38%;animation:lbl-switch 7s linear 4258ms infinite}
-  .striplabels span:nth-child(3){left:70%;animation:lbl-ft 7s linear 4500ms infinite}
+  .striplabels span:nth-child(3){color:#6FB4F2;left:70%;animation:lbl-ft 7s linear 4500ms infinite}
   /* retrain holds until the switch, t★ only flashes, fine-tune holds to the end of the pass */
   @keyframes lbl-retrain{0%{opacity:0;transform:translate(-50%,4px)}
     3%{opacity:1;transform:translate(-50%,0)}48%{opacity:1;transform:translate(-50%,0)}
@@ -105,7 +108,7 @@
     48%,100%{opacity:0;transform:translate(-50%,-2px)}}
 
   /* the marker itself: linear, so the rounds land exactly under it */
-  .playhead{position:absolute;top:-7px;height:48px;width:2px;left:0;
+  .playhead{position:absolute;top:-4px;height:82px;width:2px;left:0;
     background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.8),rgba(255,255,255,0));
     opacity:0;animation:sweep 7s linear .6s infinite;pointer-events:none}
   .playhead::after{content:"";position:absolute;top:-4px;left:50%;transform:translateX(-50%);
@@ -254,7 +257,7 @@
 
   <div class="venue"><span class="dot"></span> <b>EMNLP 2026</b> Main Conference · Budapest · Poster</div>
 
-  <h1>Train Smarter, Not Harder
+  <h1>Train <span class="w-good">Smarter</span>, Not <span class="w-bad">Harder</span>
     <span class="sub">Switching Signal-Guided Training in Active Learning</span>
   </h1>
   <p class="byline">Nagham Omar · Maya Rozenshtein · Evgeny Mishlyakov · Avigdor Gal</p>
@@ -263,6 +266,10 @@
 
   <div class="strip" aria-hidden="true">
     <div class="track">
+      <svg class="nll" viewBox="0 0 250 34" preserveAspectRatio="none" aria-hidden="true">
+        <line class="ref" x1="0" y1="28" x2="250" y2="28"/>
+        <path class="trace" d="M0 8 L96 8 L104 19 L250 19"/>
+      </svg>
     <div class="cells">
       <span class="r" style="--t:792ms"></span>
       <span class="r" style="--t:1178ms"></span>
@@ -290,10 +297,6 @@
       <span class="f" style="--t:7285ms"></span>
       <span class="f" style="--t:7495ms"></span>
     </div>
-      <svg class="nll" viewBox="0 0 250 34" preserveAspectRatio="none" aria-hidden="true">
-        <line class="ref" x1="0" y1="28" x2="250" y2="28"/>
-        <path class="trace" d="M0 8 L96 8 L104 19 L250 19"/>
-      </svg>
     </div>
     <div class="playhead" aria-hidden="true"></div>
     <div class="striplabels"><span>Retrain</span><span class="mid">switch at t★</span><span>Fine-tune</span></div>
